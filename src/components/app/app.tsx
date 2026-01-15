@@ -13,7 +13,8 @@ import '../../index.css';
 import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 
 const App = () => (
   <div className={styles.app}>
@@ -21,15 +22,56 @@ const App = () => (
     <Routes>
       <Route path='/' element={<ConstructorPage />} />
       <Route path='/feed' element={<Feed />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='/forgot-password' element={<ForgotPassword />} />
-      <Route path='/reset-password' element={<ResetPassword />} />
 
-      <Route path='/profile' element={<Profile />} />
+      <Route
+        path='/login'
+        element={
+          <ProtectedRoute unAuthOnly>
+            <Login />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/register'
+        element={
+          <ProtectedRoute unAuthOnly>
+            <Register />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/forgot-password'
+        element={
+          <ProtectedRoute unAuthOnly>
+            <ForgotPassword />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/reset-password'
+        element={
+          <ProtectedRoute unAuthOnly>
+            <ResetPassword />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/profile'
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/profile/orders'
+        element={
+          <ProtectedRoute>
+            <ProfileOrders />
+          </ProtectedRoute>
+        }
+      />
 
-      <Route path='/profile/orders' element={<ProfileOrders />} />
-      <Route path='*' element={<NotFound404 />} />
       <Route
         path='/feed/:number'
         element={
@@ -52,11 +94,15 @@ const App = () => (
       <Route
         path='/profile/orders/:number'
         element={
-          <Modal title='Детали заказа' onClose={() => window.history.back()}>
-            <OrderInfo />
-          </Modal>
+          <ProtectedRoute>
+            <Modal title='Детали заказа' onClose={() => window.history.back()}>
+              <OrderInfo />
+            </Modal>
+          </ProtectedRoute>
         }
       />
+
+      <Route path='*' element={<NotFound404 />} />
     </Routes>
   </div>
 );

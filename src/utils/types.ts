@@ -60,3 +60,34 @@ export type TMoveIngredient = {
   dragIndex: number;
   hoverIndex: number;
 };
+
+export type TLoginData = {
+  email: string;
+  password: string;
+};
+
+export type TRegisterData = TLoginData & {
+  name: string;
+};
+
+export type TPasswordForgotData = {
+  email: string;
+};
+
+export type TPasswordResetData = {
+  password: string;
+  token: string;
+};
+
+export type TTokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type TAuthResponse = {
+  success: boolean;
+  user: TUser;
+  accessToken: string;
+  refreshToken: string;
+  message?: string;
+};
