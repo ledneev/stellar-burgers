@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useSelector } from '../../services/store';
-import { selectIngredients } from '../../slices/ingredientsSlice'; // ← импортируем селектор
+import { selectIngredients } from '../../slices/ingredientsSlice';
 
 import { TTabMode, TIngredient } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
@@ -46,7 +46,6 @@ export const BurgerIngredients: FC = () => {
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Фильтрация
   const buns = ingredients.filter((item: TIngredient) => item.type === 'bun');
   const mains = ingredients.filter((item: TIngredient) => item.type === 'main');
   const sauces = ingredients.filter(
