@@ -15,6 +15,7 @@ import {
   updateUserApi,
   logoutApi
 } from '@api';
+import { deleteCookie, setCookie } from '../utils/cookie';
 
 type TAuthState = {
   user: TUser | null;
@@ -42,6 +43,8 @@ export const login = createAsyncThunk(
   async (data: TLoginData, { rejectWithValue }) => {
     try {
       const response = await loginUserApi(data);
+      localStorage.setItem('refreshToken', response.refreshToken);
+      setCookie('accessToken', response.accessToken);
       return response.user;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -54,6 +57,8 @@ export const register = createAsyncThunk(
   async (data: TRegisterData, { rejectWithValue }) => {
     try {
       const response = await registerUserApi(data);
+      localStorage.setItem('refreshToken', response.refreshToken);
+      setCookie('accessToken', response.accessToken);
       return response.user;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -160,6 +165,8 @@ const authSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
+        localStorage.removeItem('refreshToken');
+        deleteCookie('accessToken');
       });
   },
 
