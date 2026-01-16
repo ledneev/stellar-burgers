@@ -63,7 +63,7 @@ export const register = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   'auth/updateUser',
-  async (data: Partial<TUser>, { rejectWithValue }) => {
+  async (data: Partial<TRegisterData>, { rejectWithValue }) => {
     try {
       const response = await updateUserApi(data);
       return response.user;
