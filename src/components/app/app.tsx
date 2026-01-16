@@ -90,17 +90,7 @@ const App = () => {
             </Modal>
           }
         />
-        <Route
-          path='/ingredients/:id'
-          element={
-            <Modal
-              title='Детали ингредиента'
-              onClose={() => window.history.back()}
-            >
-              <IngredientDetails />
-            </Modal>
-          }
-        />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route
           path='/profile/orders/:number'
           element={
