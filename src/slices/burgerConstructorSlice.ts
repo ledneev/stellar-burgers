@@ -1,13 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  TAddIngredient,
-  TConstructorState,
-  TMoveIngredient,
-  TOrder,
-  TRemoveIngredient
-} from '@utils-types';
+import { TAddIngredient, TConstructorState, TOrder } from '@utils-types';
+import { v4 as uuidv4 } from 'uuid';
 
-export const initialState: TConstructorState = {
+const initialState: TConstructorState = {
   constructorItems: {
     bun: null,
     ingredients: []
@@ -16,48 +11,50 @@ export const initialState: TConstructorState = {
   orderModalData: null
 };
 
-const burgerConstructorSlice = createSlice({
-  name: 'constructor',
+export const burgerConstructorSlice = createSlice({
+  name: 'burgerConstructor',
   initialState,
   reducers: {
     addIngredient: (state, action: PayloadAction<TAddIngredient>) => {
-      const { ingredient } = action.payload;
+      const { ingredient } = action.payload; // ← уже имеет id
+
       if (ingredient.type === 'bun') {
         state.constructorItems.bun = ingredient;
       } else {
         state.constructorItems.ingredients.push(ingredient);
       }
     },
-    removeIngredient: (state, action: PayloadAction<TRemoveIngredient>) => {
+    removeIngredient: (state, action: PayloadAction<{ id: string }>) => {
       state.constructorItems.ingredients =
         state.constructorItems.ingredients.filter(
-          (item) => item._id !== action.payload.id
+          (item) => item.id !== action.payload.id
         );
     },
-
-    moveIngredient: (state, action: PayloadAction<TMoveIngredient>) => {
-      const { dragIndex, hoverIndex } = action.payload;
-      const ingredients = [...state.constructorItems.ingredients];
-      const dragged = ingredients[dragIndex];
-      ingredients.splice(dragIndex, 1),
-        ingredients.splice(hoverIndex, 0, dragged);
-      state.constructorItems.ingredients = ingredients;
+    moveIngredient: (
+      state,
+      action: PayloadAction<{ fromIndex: number; toIndex: number }>
+    ) => {
+      const { fromIndex, toIndex } = action.payload;
+      const ingredients = state.constructorItems.ingredients;
+      const [moved] = ingredients.splice(fromIndex, 1);
+      ingredients.splice(toIndex, 0, moved);
     },
-
-    setOrderRequest: (state, action: PayloadAction<boolean>) => {
-      state.orderRequest = action.payload;
+    resetConstructor: (state) => {
+      state.constructorItems.bun = null;
+      state.constructorItems.ingredients = [];
+      state.orderModalData = null;
     },
-
     setOrderModalData: (state, action: PayloadAction<TOrder | null>) => {
       state.orderModalData = action.payload;
     },
-
-    resetConstructor: (state) => {
-      state.constructorItems = {
-        bun: null,
-        ingredients: []
-      };
+    setOrderRequest: (state, action: PayloadAction<boolean>) => {
+      state.orderRequest = action.payload;
     }
+  },
+  selectors: {
+    selectConstructorItems: (state) => state.constructorItems,
+    selectOrderRequest: (state) => state.orderRequest,
+    selectOrderModalData: (state) => state.orderModalData
   }
 });
 
@@ -65,9 +62,15 @@ export const {
   addIngredient,
   removeIngredient,
   moveIngredient,
-  setOrderRequest,
+  resetConstructor,
   setOrderModalData,
-  resetConstructor
+  setOrderRequest
 } = burgerConstructorSlice.actions;
+
+export const {
+  selectConstructorItems,
+  selectOrderRequest,
+  selectOrderModalData
+} = burgerConstructorSlice.selectors;
 
 export const burgerConstructorReducer = burgerConstructorSlice.reducer;

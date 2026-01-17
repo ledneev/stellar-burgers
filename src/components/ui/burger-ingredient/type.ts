@@ -4,6 +4,7 @@ import { TIngredient } from '@utils-types';
 export type TBurgerIngredientUIProps = {
   ingredient: TIngredient;
   count: number;
-  locationState: { background: Location };
+  locationState: { background: string };
   handleAdd: () => void;
+  dragRef?: (node: HTMLElement | null) => void;
 };
