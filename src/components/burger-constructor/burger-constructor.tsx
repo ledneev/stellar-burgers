@@ -1,5 +1,5 @@
 import { FC, useCallback, useMemo } from 'react';
-import { TConstructorIngredient, TConstructorState } from '@utils-types';
+import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ import {
   setOrderRequest
 } from '../../slices/burgerConstructorSlice';
 import { orderBurgerApi } from '@api';
+import { getCookie } from '../../utils/cookie';
 
 export const BurgerConstructor: FC = () => {
   const constructorItems = useSelector(
@@ -36,20 +37,25 @@ export const BurgerConstructor: FC = () => {
   );
 
   const onOrderClick = useCallback(() => {
-    if (
-      !constructorItems.bun ||
-      orderRequest ||
-      !window.localStorage.getItem('accessToken')
-    )
+    if (!constructorItems.bun) {
       return;
+    }
+
+    const accessToken = getCookie('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    if (!accessToken && !refreshToken) {
+      navigate('/login');
+      return;
+    }
+
+    if (orderRequest) return;
 
     dispatch(setOrderRequest(true));
 
     const ingredientIds = [
       constructorItems.bun._id,
-      ...constructorItems.ingredients.map(
-        (ing: TConstructorIngredient) => ing._id
-      ),
+      ...constructorItems.ingredients.map((ing) => ing._id),
       constructorItems.bun._id
     ];
 
@@ -64,7 +70,7 @@ export const BurgerConstructor: FC = () => {
       .finally(() => {
         dispatch(setOrderRequest(false));
       });
-  }, [constructorItems, orderRequest, dispatch]);
+  }, [constructorItems, orderRequest, dispatch, navigate]);
 
   const closeOrderModal = useCallback(() => {
     dispatch(setOrderModalData(null));
