@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo, useEffect } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
@@ -57,17 +57,42 @@ export const BurgerConstructor: FC = () => {
       constructorItems.bun._id
     ];
 
-    orderBurgerApi(ingredientIds).then((response) => {
+    const timeoutId = setTimeout(() => {
       dispatch(setOrderRequest(false));
+    }, 15000);
 
-      dispatch(setOrderModalData(response.order));
-    });
+    orderBurgerApi(ingredientIds)
+      .then((response) => {
+        clearTimeout(timeoutId);
+        dispatch(setOrderModalData(response.order));
+      })
+      .catch((err) => {
+        clearTimeout(timeoutId);
+        dispatch(setOrderRequest(false));
+
+        if (err.status === 401) {
+          navigate('/login');
+        }
+      });
   }, [constructorItems, orderRequest, orderModalData, dispatch, navigate]);
 
   const closeOrderModal = useCallback(() => {
     dispatch(setOrderModalData(null));
     dispatch(resetConstructor());
   }, [dispatch]);
+
+  // Сброс состояния при уходе с конструктора
+  useEffect(
+    () => () => {
+      if (orderRequest) {
+        dispatch(setOrderRequest(false));
+      }
+      if (orderModalData) {
+        dispatch(setOrderModalData(null));
+      }
+    },
+    [dispatch, orderRequest, orderModalData]
+  );
 
   return (
     <BurgerConstructorUI

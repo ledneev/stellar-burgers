@@ -19,7 +19,6 @@ export const ProfileOrders: FC = () => {
   if (loading && !orders.length) {
     return <p>Загрузка заказов...</p>;
   }
-
   return (
     <>
       <ProfileOrdersUI orders={orders} />

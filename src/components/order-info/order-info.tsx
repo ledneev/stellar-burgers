@@ -93,7 +93,6 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
-  // 🔥 Только если есть background — оборачиваем в Modal
   if (background) {
     return (
       <Modal title='Детали заказа' onClose={() => window.history.back()}>
@@ -102,6 +101,5 @@ export const OrderInfo: FC = () => {
     );
   }
 
-  // Прямой заход — как страница
   return <OrderInfoUI orderInfo={orderInfo} />;
 };
