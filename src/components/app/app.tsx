@@ -91,14 +91,7 @@ const App = () => {
           }
         />
 
-        <Route
-          path='/feed/:number'
-          element={
-            <Modal title='Детали заказа' onClose={() => window.history.back()}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
+        <Route path='/feed/:number' element={<OrderInfo />} />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
 
         <Route path='*' element={<NotFound404 />} />

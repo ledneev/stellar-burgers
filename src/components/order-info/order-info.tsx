@@ -4,8 +4,10 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useSelector, useDispatch } from '../../services/store';
 import { useParams, useLocation } from 'react-router-dom';
-import { fetchUserOrders } from '../../slices/profileOrdersSlice';
+
 import { Modal } from '@components';
+import { fetchFeed } from '../../slices/feedSlice';
+import { fetchUserOrders } from '../../slices/profileOrdersSlice';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams<{ number: string }>();
@@ -13,25 +15,33 @@ export const OrderInfo: FC = () => {
   const location = useLocation();
   const background = location.state?.background;
 
-  const isProfilePage = location.pathname.startsWith('/profile/orders');
   const isFeedPage = location.pathname.startsWith('/feed');
+  const isProfilePage = location.pathname.startsWith('/profile/orders');
 
   const dispatch = useDispatch();
 
   const feedOrders = useSelector((state) => state.feed.orders);
-  const profileOrdersData = useSelector((state) => state.profileOrders.orders);
-  const profileOrdersList = profileOrdersData.orders;
-  const profileOrdersLoading = useSelector(
-    (state) => state.profileOrders.loading
+  const feedLoading = useSelector((state) => state.feed.isLoading);
+  const feedLoaded = useSelector((state) => state.feed.loaded);
+
+  const profileOrdersList = useSelector(
+    (state) => state.profileOrders.orders.orders
   );
+  const profileLoading = useSelector((state) => state.profileOrders.loading);
 
   const ingredients = useSelector((state) => state.ingredients.ingredients);
 
   useEffect(() => {
-    if (isProfilePage && !profileOrdersList.length && !profileOrdersLoading) {
+    if (isFeedPage && !feedLoaded && !feedLoading) {
+      dispatch(fetchFeed());
+    }
+  }, [isFeedPage, feedLoaded, feedLoading, dispatch]);
+
+  useEffect(() => {
+    if (isProfilePage && !profileOrdersList.length && !profileLoading) {
       dispatch(fetchUserOrders());
     }
-  }, [isProfilePage, profileOrdersList.length, profileOrdersLoading, dispatch]);
+  }, [isProfilePage, profileOrdersList.length, profileLoading, dispatch]);
 
   const orders = isProfilePage
     ? profileOrdersList
@@ -83,6 +93,7 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
+  // 🔥 Только если есть background — оборачиваем в Modal
   if (background) {
     return (
       <Modal title='Детали заказа' onClose={() => window.history.back()}>
@@ -91,5 +102,6 @@ export const OrderInfo: FC = () => {
     );
   }
 
+  // Прямой заход — как страница
   return <OrderInfoUI orderInfo={orderInfo} />;
 };
