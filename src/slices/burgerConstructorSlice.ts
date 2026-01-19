@@ -16,12 +16,15 @@ export const burgerConstructorSlice = createSlice({
   initialState,
   reducers: {
     addIngredient: (state, action: PayloadAction<TAddIngredient>) => {
-      const { ingredient } = action.payload; // ← уже имеет id
+      const { ingredient } = action.payload;
 
       if (ingredient.type === 'bun') {
         state.constructorItems.bun = ingredient;
       } else {
-        state.constructorItems.ingredients.push(ingredient);
+        state.constructorItems.ingredients = [
+          ...state.constructorItems.ingredients,
+          ingredient
+        ];
       }
     },
     removeIngredient: (state, action: PayloadAction<{ id: string }>) => {
@@ -35,9 +38,10 @@ export const burgerConstructorSlice = createSlice({
       action: PayloadAction<{ fromIndex: number; toIndex: number }>
     ) => {
       const { fromIndex, toIndex } = action.payload;
-      const ingredients = state.constructorItems.ingredients;
+      const ingredients = [...state.constructorItems.ingredients];
       const [moved] = ingredients.splice(fromIndex, 1);
       ingredients.splice(toIndex, 0, moved);
+      state.constructorItems.ingredients = ingredients;
     },
     resetConstructor: (state) => {
       state.constructorItems.bun = null;

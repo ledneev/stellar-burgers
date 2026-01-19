@@ -37,9 +37,7 @@ export const BurgerConstructor: FC = () => {
   );
 
   const onOrderClick = useCallback(() => {
-    if (!constructorItems.bun) {
-      return;
-    }
+    if (!constructorItems.bun) return;
 
     const accessToken = getCookie('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
@@ -49,7 +47,7 @@ export const BurgerConstructor: FC = () => {
       return;
     }
 
-    if (orderRequest) return;
+    if (orderRequest || orderModalData) return;
 
     dispatch(setOrderRequest(true));
 
@@ -59,23 +57,17 @@ export const BurgerConstructor: FC = () => {
       constructorItems.bun._id
     ];
 
-    orderBurgerApi(ingredientIds)
-      .then((data) => {
-        dispatch(setOrderModalData(data.order));
-        dispatch(resetConstructor());
-      })
-      .catch((err) => {
-        console.error('Ошибка при оформлении заказа:', err);
-      })
-      .finally(() => {
-        dispatch(setOrderRequest(false));
-      });
-  }, [constructorItems, orderRequest, dispatch, navigate]);
+    orderBurgerApi(ingredientIds).then((response) => {
+      dispatch(setOrderRequest(false));
+
+      dispatch(setOrderModalData(response.order));
+    });
+  }, [constructorItems, orderRequest, orderModalData, dispatch, navigate]);
 
   const closeOrderModal = useCallback(() => {
     dispatch(setOrderModalData(null));
-    navigate('/');
-  }, [dispatch, navigate]);
+    dispatch(resetConstructor());
+  }, [dispatch]);
 
   return (
     <BurgerConstructorUI
