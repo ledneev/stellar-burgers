@@ -20,18 +20,25 @@ type TProfileOrdersState = {
   orders: TOrdersResponse;
   loading: boolean;
   error: string | null;
+  loaded: boolean;
 };
 
 const initialState: TProfileOrdersState = {
   orders: { orders: [], total: 0, totalToday: 0 },
   loading: false,
-  error: null
+  error: null,
+  loaded: false
 };
 
 export const profileOrdersSlice = createSlice({
   name: 'profileOrders',
   initialState,
-  reducers: {},
+  reducers: {
+    resetProfileOrders: (state) => {
+      state.orders = { orders: [], total: 0, totalToday: 0 };
+      state.loaded = false;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserOrders.pending, (state) => {
@@ -41,12 +48,14 @@ export const profileOrdersSlice = createSlice({
       .addCase(fetchUserOrders.fulfilled, (state, action) => {
         state.loading = false;
         state.orders = action.payload;
+        state.loaded = true;
       })
       .addCase(fetchUserOrders.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Ошибка загрузки заказов';
+        state.error = action.error.message || 'Ошибка';
       });
   }
 });
 
+export const { resetProfileOrders } = profileOrdersSlice.actions;
 export const profileOrdersReducer = profileOrdersSlice.reducer;

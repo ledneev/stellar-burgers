@@ -8,13 +8,15 @@ import { Outlet } from 'react-router-dom';
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();
   const { orders } = useSelector((state) => state.profileOrders.orders);
-  const loading = useSelector((state) => state.profileOrders.loading);
+  const { loading, loaded } = useSelector((state) => state.profileOrders);
 
   useEffect(() => {
-    dispatch(fetchUserOrders());
-  }, [dispatch]);
+    if (!loaded && !loading) {
+      dispatch(fetchUserOrders());
+    }
+  }, [dispatch, loaded, loading]);
 
-  if (loading) {
+  if (loading && !orders.length) {
     return <p>Загрузка заказов...</p>;
   }
 

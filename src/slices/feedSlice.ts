@@ -8,6 +8,7 @@ type TFeedState = {
   totalToday: number;
   isLoading: boolean;
   error: string | null;
+  loaded: boolean;
 };
 
 const initialState: TFeedState = {
@@ -15,7 +16,8 @@ const initialState: TFeedState = {
   total: 0,
   totalToday: 0,
   isLoading: false,
-  error: null
+  error: null,
+  loaded: false
 };
 
 export const fetchFeed = createAsyncThunk('feed/fetch', async () => {
@@ -44,6 +46,7 @@ export const feedSlice = createSlice({
         state.orders = action.payload.orders;
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
+        state.loaded = true;
       })
       .addCase(fetchFeed.rejected, (state, action) => {
         state.isLoading = false;

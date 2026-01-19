@@ -80,16 +80,16 @@ const App = () => {
               <ProfileOrders />
             </ProtectedRoute>
           }
-        >
-          <Route
-            path=':number'
-            element={
-              <ProtectedRoute>
-                <OrderInfo />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
+        />
+
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path='/feed/:number'
