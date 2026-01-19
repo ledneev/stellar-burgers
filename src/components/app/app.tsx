@@ -80,7 +80,16 @@ const App = () => {
               <ProfileOrders />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route
+            path=':number'
+            element={
+              <ProtectedRoute>
+                <OrderInfo />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
 
         <Route
           path='/feed/:number'
@@ -91,19 +100,6 @@ const App = () => {
           }
         />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
-        <Route
-          path='/profile/orders/:number'
-          element={
-            <ProtectedRoute>
-              <Modal
-                title='Детали заказа'
-                onClose={() => window.history.back()}
-              >
-                <OrderInfo />
-              </Modal>
-            </ProtectedRoute>
-          }
-        />
 
         <Route path='*' element={<NotFound404 />} />
       </Routes>

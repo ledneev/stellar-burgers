@@ -3,11 +3,14 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useSelector } from '../../services/store';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
+import { Modal } from '@components';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams<{ number: string }>();
   const parsedNumber = number ? parseInt(number, 10) : null;
+  const location = useLocation();
+  const background = location.state?.background;
 
   const orders = useSelector((state) => state.feed.orders);
   const ingredients = useSelector((state) => state.ingredients.ingredients);
@@ -54,6 +57,14 @@ export const OrderInfo: FC = () => {
 
   if (!orderInfo) {
     return <Preloader />;
+  }
+
+  if (background) {
+    return (
+      <Modal title='Детали заказа' onClose={() => window.history.back()}>
+        <OrderInfoUI orderInfo={orderInfo} />
+      </Modal>
+    );
   }
 
   return <OrderInfoUI orderInfo={orderInfo} />;
