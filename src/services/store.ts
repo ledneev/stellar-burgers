@@ -8,13 +8,15 @@ import { ingredientsReducer } from '../slices/ingredientsSlice';
 import { burgerConstructorReducer } from '../slices/burgerConstructorSlice';
 import { authReducer } from '../slices/authSlice';
 import { feedReducer } from '../slices/feedSlice';
+import { profileOrdersReducer } from '../slices/profileOrdersSlice';
 
 const store = configureStore({
   reducer: {
     ingredients: ingredientsReducer,
     burgerConstructor: burgerConstructorReducer,
     auth: authReducer,
-    feed: feedReducer
+    feed: feedReducer,
+    profileOrders: profileOrdersReducer
   },
   devTools: process.env.NODE_ENV !== 'production'
 });
