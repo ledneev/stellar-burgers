@@ -4,10 +4,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 const meta = {
   title: 'Example/FeedInfo',
   component: FeedInfoUI,
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
   parameters: {
-    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
     layout: 'fullscreen'
   }
 } satisfies Meta<typeof FeedInfoUI>;
@@ -21,18 +19,16 @@ export const DefaultFeedInfo: Story = {
       orders: [
         {
           _id: '11111',
-          status: 'ready',
-          name: 'Burger',
-          createdAt: '',
-          updatedAt: '',
+          status: 'done',
+          name: 'Краторная булка N-200i',
+          createdAt: '2023-08-01T12:00:00Z',
+          updatedAt: '2023-08-01T12:10:00Z',
           number: 123,
-          ingredients: ['Булка', 'Начинка']
+          ingredients: ['1', '2', '3']
         }
       ],
       total: 12,
-      totalToday: 2,
-      isLoading: false,
-      error: null
+      totalToday: 2
     },
     readyOrders: [123, 124, 125],
     pendingOrders: [126, 127]

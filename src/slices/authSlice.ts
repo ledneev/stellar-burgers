@@ -46,8 +46,11 @@ export const login = createAsyncThunk(
       localStorage.setItem('refreshToken', response.refreshToken);
       setCookie('accessToken', response.accessToken);
       return response.user;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'message' in error) {
+        return rejectWithValue((error as { message: string }).message);
+      }
+      return rejectWithValue('Ошибка при входе');
     }
   }
 );
@@ -60,8 +63,11 @@ export const register = createAsyncThunk(
       localStorage.setItem('refreshToken', response.refreshToken);
       setCookie('accessToken', response.accessToken);
       return response.user;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'message' in error) {
+        return rejectWithValue((error as { message: string }).message);
+      }
+      return rejectWithValue('Ошибка при регистрации');
     }
   }
 );
@@ -72,8 +78,11 @@ export const updateUser = createAsyncThunk(
     try {
       const response = await updateUserApi(data);
       return response.user;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'message' in error) {
+        return rejectWithValue((error as { message: string }).message);
+      }
+      return rejectWithValue('Ошибка при обновлении профиля');
     }
   }
 );
@@ -83,8 +92,11 @@ export const forgotPassword = createAsyncThunk(
   async (data: TPasswordForgotData, { rejectWithValue }) => {
     try {
       await forgotPasswordApi(data);
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'message' in error) {
+        return rejectWithValue((error as { message: string }).message);
+      }
+      return rejectWithValue('Ошибка при восстановлении пароля');
     }
   }
 );
@@ -94,8 +106,11 @@ export const resetPassword = createAsyncThunk(
   async (data: TPasswordResetData, { rejectWithValue }) => {
     try {
       await resetPasswordApi(data);
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'message' in error) {
+        return rejectWithValue((error as { message: string }).message);
+      }
+      return rejectWithValue('Ошибка при сбросе пароля');
     }
   }
 );
