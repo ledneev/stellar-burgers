@@ -9,34 +9,45 @@ export const Profile: FC = () => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
-  const [formValue, setFormValue] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
+  const [formValue, setFormValue] = useState<{
+    name: string;
+    email: string;
+    password: string;
+  }>({
+    name: '',
+    email: '',
     password: ''
   });
 
   useEffect(() => {
     if (user) {
-      setFormValue((prev) => ({
-        ...prev,
+      setFormValue({
         name: user.name,
-        email: user.email
-      }));
+        email: user.email,
+        password: ''
+      });
     }
   }, [user]);
 
+  // ✅ Исправлено: теперь всегда boolean
   const isFormChanged =
-    formValue.name !== user?.name ||
-    formValue.email !== user?.email ||
-    !!formValue.password;
+    !!user &&
+    (formValue.name !== user.name ||
+      formValue.email !== user.email ||
+      formValue.password !== '');
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    const { name, email, password } = formValue;
+    const updatedData: Partial<TRegisterData> = {};
 
-    const updatedData: Partial<TRegisterData> = { name, email };
-    if (password) {
-      updatedData.password = password;
+    if (formValue.name !== user?.name) {
+      updatedData.name = formValue.name;
+    }
+    if (formValue.email !== user?.email) {
+      updatedData.email = formValue.email;
+    }
+    if (formValue.password) {
+      updatedData.password = formValue.password;
     }
 
     dispatch(updateUser(updatedData));
@@ -45,11 +56,13 @@ export const Profile: FC = () => {
 
   const handleCancel = (e: SyntheticEvent) => {
     e.preventDefault();
-    setFormValue({
-      name: user?.name || '',
-      email: user?.email || '',
-      password: ''
-    });
+    if (user) {
+      setFormValue({
+        name: user.name,
+        email: user.email,
+        password: ''
+      });
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,9 +75,9 @@ export const Profile: FC = () => {
   return (
     <ProfileUI
       formValue={formValue}
-      isFormChanged={isFormChanged}
-      handleCancel={handleCancel}
+      isFormChanged={isFormChanged} // ✅ теперь boolean
       handleSubmit={handleSubmit}
+      handleCancel={handleCancel}
       handleInputChange={handleInputChange}
     />
   );
