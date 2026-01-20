@@ -65,6 +65,7 @@ export const BurgerConstructor: FC = () => {
       .then((response) => {
         clearTimeout(timeoutId);
         dispatch(setOrderModalData(response.order));
+        dispatch(resetConstructor());
       })
       .catch((err) => {
         clearTimeout(timeoutId);
@@ -78,10 +79,8 @@ export const BurgerConstructor: FC = () => {
 
   const closeOrderModal = useCallback(() => {
     dispatch(setOrderModalData(null));
-    dispatch(resetConstructor());
   }, [dispatch]);
 
-  // Сброс состояния при уходе с конструктора
   useEffect(
     () => () => {
       if (orderRequest) {
