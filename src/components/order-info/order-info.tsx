@@ -93,16 +93,5 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
-  if (background) {
-    return (
-      <Modal
-        title={`#${orderInfo.number}`}
-        onClose={() => window.history.back()}
-      >
-        <OrderInfoUI orderInfo={orderInfo} showNumberInBody={false} />
-      </Modal>
-    );
-  }
-
-  return <OrderInfoUI orderInfo={orderInfo} showNumberInBody />;
+  return <OrderInfoUI orderInfo={orderInfo} showNumberInBody={!background} />;
 };

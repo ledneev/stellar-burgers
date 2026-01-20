@@ -81,6 +81,7 @@ export const DefaultOrderCard: Story = {
         search: '',
         state: null
       }
-    }
+    },
+    to: '/feed/12345'
   }
 };

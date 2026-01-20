@@ -6,17 +6,15 @@ import {
   selectIngredients,
   selectLoading as selectIngredientsLoading
 } from '../../slices/ingredientsSlice';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { fetchIngredients } from '../../slices/ingredientsSlice';
 
 import { TIngredient } from '@utils-types';
 import styles from './ingredient-details.module.css';
-import { Modal } from '../modal';
 
 export const IngredientDetails: FC = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const ingredients = useSelector(selectIngredients);
@@ -41,17 +39,8 @@ export const IngredientDetails: FC = () => {
       <div className='text text_type_main-large p-4'>Ингредиент не найден</div>
     );
   }
-
-  const handleClose = () => {
-    navigate(backgroundLocation || '/', { replace: true });
-  };
-
   if (backgroundLocation) {
-    return (
-      <Modal title='Детали ингредиента' onClose={handleClose}>
-        <IngredientDetailsUI ingredientData={ingredientData} />
-      </Modal>
-    );
+    return <IngredientDetailsUI ingredientData={ingredientData} />;
   }
 
   return (

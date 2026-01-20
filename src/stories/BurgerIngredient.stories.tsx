@@ -28,7 +28,7 @@ export const DefaultIngredient: Story = {
     ingredient: {
       _id: '111',
       name: 'Булка',
-      type: 'bun',
+      type: 'top',
       proteins: 12,
       fat: 33,
       carbohydrates: 22,
@@ -40,7 +40,13 @@ export const DefaultIngredient: Story = {
     },
     count: 2,
     locationState: {
-      background: '/'
+      background: {
+        hash: '',
+        key: 'eitkep27',
+        pathname: '/',
+        search: '',
+        state: null
+      }
     },
     handleAdd: () => {}
   }
