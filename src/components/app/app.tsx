@@ -18,6 +18,7 @@ import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import { checkAuth } from '../../slices/authSlice';
+import { fetchIngredients } from '../../slices/ingredientsSlice';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(checkAuth());
+    dispatch(fetchIngredients());
   }, [dispatch]);
 
   const number = location.pathname.split('/').pop();

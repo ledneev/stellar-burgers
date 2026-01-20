@@ -24,12 +24,6 @@ export const IngredientDetails: FC = () => {
 
   const backgroundLocation = location.state?.background;
 
-  useEffect(() => {
-    if (!ingredients.length && !isLoading) {
-      dispatch(fetchIngredients());
-    }
-  }, [dispatch, ingredients.length, isLoading]);
-
   if (isLoading || (!ingredientData && ingredients.length > 0)) {
     return <Preloader />;
   }

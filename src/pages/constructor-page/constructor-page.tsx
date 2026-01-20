@@ -11,10 +11,6 @@ export const ConstructorPage: FC = () => {
   const dispatch = useDispatch();
   const isIngredientsLoading = useSelector(selectLoading);
 
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, []);
-
   return (
     <>
       {isIngredientsLoading ? (
