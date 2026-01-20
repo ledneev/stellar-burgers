@@ -29,7 +29,6 @@ export const Profile: FC = () => {
     }
   }, [user]);
 
-  // ✅ Исправлено: теперь всегда boolean
   const isFormChanged =
     !!user &&
     (formValue.name !== user.name ||
@@ -75,7 +74,7 @@ export const Profile: FC = () => {
   return (
     <ProfileUI
       formValue={formValue}
-      isFormChanged={isFormChanged} // ✅ теперь boolean
+      isFormChanged={isFormChanged}
       handleSubmit={handleSubmit}
       handleCancel={handleCancel}
       handleInputChange={handleInputChange}
