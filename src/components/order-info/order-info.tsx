@@ -95,11 +95,14 @@ export const OrderInfo: FC = () => {
 
   if (background) {
     return (
-      <Modal title='Детали заказа' onClose={() => window.history.back()}>
-        <OrderInfoUI orderInfo={orderInfo} />
+      <Modal
+        title={`#${orderInfo.number}`}
+        onClose={() => window.history.back()}
+      >
+        <OrderInfoUI orderInfo={orderInfo} showNumberInBody={false} />
       </Modal>
     );
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  return <OrderInfoUI orderInfo={orderInfo} showNumberInBody />;
 };
