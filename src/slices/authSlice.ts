@@ -115,9 +115,18 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await logoutApi();
-});
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async (_, { dispatch }) => {
+    try {
+      const response = await logoutApi();
+    } catch (error) {
+    } finally {
+      localStorage.removeItem('refreshToken');
+      deleteCookie('accessToken');
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -180,8 +189,6 @@ const authSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
-        localStorage.removeItem('refreshToken');
-        deleteCookie('accessToken');
       });
   },
 
