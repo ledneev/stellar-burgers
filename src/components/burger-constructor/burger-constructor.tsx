@@ -10,6 +10,7 @@ import {
 } from '../../slices/burgerConstructorSlice';
 import { orderBurgerApi } from '@api';
 import { getCookie } from '../../utils/cookie';
+import { selectIsAuthenticated } from '../../slices/authSlice';
 
 export const BurgerConstructor: FC = () => {
   const constructorItems = useSelector(
@@ -21,7 +22,7 @@ export const BurgerConstructor: FC = () => {
   const orderModalData = useSelector(
     (state) => state.burgerConstructor.orderModalData
   );
-
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -42,9 +43,8 @@ export const BurgerConstructor: FC = () => {
     const accessToken = getCookie('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
 
-    if (!accessToken && !refreshToken) {
-      navigate('/login');
-      return;
+    if (!isAuthenticated) {
+      return navigate('/login');
     }
 
     if (orderRequest || orderModalData) return;

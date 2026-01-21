@@ -33,10 +33,21 @@ export const initialState: TAuthState = {
   isPasswordResetRequested: false
 };
 
-export const checkAuth = createAsyncThunk('auth/checkAuth', async () => {
-  const data = await getUserApi();
-  return data.user;
-});
+export const checkAuth = createAsyncThunk(
+  'auth/checkAuth',
+  async (_, { dispatch }) => {
+    try {
+      const data = await getUserApi();
+      return data.user;
+    } catch (error: any) {
+      if (error.status === 401 || error.message?.includes('401')) {
+        localStorage.removeItem('refreshToken');
+        deleteCookie('accessToken');
+      }
+      throw error;
+    }
+  }
+);
 
 export const login = createAsyncThunk(
   'auth/login',
@@ -186,9 +197,13 @@ const authSlice = createSlice({
         state.isPasswordResetRequested = false;
       })
 
+      .addCase(logout.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
+        state.isLoading = false;
       });
   },
 
