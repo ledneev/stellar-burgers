@@ -117,9 +117,9 @@ export const resetPassword = createAsyncThunk(
 
 export const logout = createAsyncThunk(
   'auth/logout',
-  async (_, { dispatch }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await logoutApi();
+      await logoutApi();
     } catch (error) {
     } finally {
       localStorage.removeItem('refreshToken');
