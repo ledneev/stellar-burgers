@@ -14,16 +14,13 @@ export const LoginUI: FC<LoginUIProps> = ({
   errorText,
   handleSubmit,
   password,
-  setPassword
+  setPassword,
+  isLoading = false
 }) => (
   <main className={styles.container}>
     <div className={`pt-6 ${styles.wrapCenter}`}>
       <h3 className='pb-6 text text_type_main-medium'>Вход</h3>
-      <form
-        className={`pb-15 ${styles.form}`}
-        name='login'
-        onSubmit={handleSubmit}
-      >
+      <form className={`pb-15 ${styles.form}`} onSubmit={handleSubmit}>
         <>
           <div className='pb-6'>
             <Input
@@ -32,9 +29,10 @@ export const LoginUI: FC<LoginUIProps> = ({
               onChange={(e) => setEmail(e.target.value)}
               value={email}
               name='email'
-              error={false}
-              errorText=''
+              error={!!errorText}
+              errorText={errorText}
               size='default'
+              disabled={isLoading}
             />
           </div>
           <div className='pb-6'>
@@ -42,18 +40,19 @@ export const LoginUI: FC<LoginUIProps> = ({
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               name='password'
+              disabled={isLoading}
             />
           </div>
           <div className={`pb-6 ${styles.button}`}>
-            <Button type='primary' size='medium' htmlType='submit'>
-              Войти
+            <Button
+              type='primary'
+              size='medium'
+              htmlType='submit'
+              disabled={isLoading}
+            >
+              {isLoading ? 'Вход...' : 'Войти'}
             </Button>
           </div>
-          {errorText && (
-            <p className={`${styles.error} text text_type_main-default pb-6`}>
-              {errorText}
-            </p>
-          )}
         </>
       </form>
       <div className={`pb-4 ${styles.question} text text_type_main-default`}>
