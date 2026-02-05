@@ -53,4 +53,44 @@ describe('rootReducer', () => {
       loaded: false
     });
   });
+
+  it('должен вернуть начальное состояние при неизвестном экшене', () => {
+    const state = rootReducer(undefined, { type: 'UNKNOWN_ACTION' });
+
+    expect(state.ingredients).toEqual({
+      ingredients: [],
+      loading: false,
+      error: null
+    });
+
+    expect(state.burgerConstructor).toEqual({
+      constructorItems: { bun: null, ingredients: [] },
+      orderRequest: false,
+      orderModalData: null
+    });
+
+    expect(state.auth).toEqual({
+      user: null,
+      isAuthenticated: false,
+      isLoading: false,
+      error: null,
+      isPasswordResetRequested: false
+    });
+
+    expect(state.feed).toEqual({
+      orders: [],
+      total: 0,
+      totalToday: 0,
+      isLoading: false,
+      error: null,
+      loaded: false
+    });
+
+    expect(state.profileOrders).toEqual({
+      orders: { orders: [], total: 0, totalToday: 0 },
+      loading: false,
+      error: null,
+      loaded: false
+    });
+  });
 });
