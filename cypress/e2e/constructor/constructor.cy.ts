@@ -1,3 +1,12 @@
+const selectors = {
+  modal: '[data-cy="modal"]',
+  modalTitle: '[data-cy="modal-title"]',
+  modalClose: '[data-cy="modal-close"]',
+  modalOverlay: '[data-cy="modal-overlay"]',
+  orderButton: '[data-cy="order-button"]',
+  orderNumber: '[data-cy="order-number"]'
+};
+
 describe('Конструктор бургера', () => {
   beforeEach(() => {
     cy.login();
@@ -32,20 +41,20 @@ describe('Конструктор бургера', () => {
   describe('Модальное окно ингредиента', () => {
     it('Открывается по клику на ингредиент', () => {
       cy.contains('Краторная булка N-200i').click();
-      cy.get('[data-cy="modal"]').should('be.visible');
-      cy.get('[data-cy="modal-title"]').should('contain', 'Детали ингредиента');
+      cy.get(selectors.modal).should('be.visible');
+      cy.get(selectors.modalTitle).should('contain', 'Детали ингредиента');
     });
 
     it('Закрывается по клику на крестик', () => {
       cy.contains('Краторная булка N-200i').click();
-      cy.get('[data-cy="modal-close"]').click();
-      cy.get('[data-cy="modal"]').should('not.exist');
+      cy.get(selectors.modalClose).click();
+      cy.get(selectors.modal).should('not.exist');
     });
 
     it('Закрывается по клику на оверлей', () => {
       cy.contains('Краторная булка N-200i').click();
-      cy.get('[data-cy="modal-overlay"]').click({ force: true });
-      cy.get('[data-cy="modal"]').should('not.exist');
+      cy.get(selectors.modalOverlay).click({ force: true });
+      cy.get(selectors.modal).should('not.exist');
     });
   });
 
@@ -57,7 +66,7 @@ describe('Конструктор бургера', () => {
         .find('button')
         .click();
 
-      cy.get('[data-cy="order-button"]').contains('Оформить заказ').click();
+      cy.get(selectors.orderButton).contains('Оформить заказ').click();
 
       cy.wait('@createOrder')
         .its('response.body')
@@ -67,12 +76,10 @@ describe('Конструктор бургера', () => {
           expect(body.order).to.have.property('number', 58321);
         });
 
-      cy.get('[data-cy="order-number"]', { timeout: 5000 }).should(
-        'be.visible'
-      );
+      cy.get(selectors.orderNumber).should('be.visible');
 
-      cy.get('[data-cy="modal-overlay"]').click({ force: true });
-      cy.get('[data-cy="modal"]').should('not.be.exist');
+      cy.get(selectors.modalOverlay).click({ force: true });
+      cy.get(selectors.modal).should('not.exist');
 
       cy.get('.constructor-element').should('have.length.lessThan', 3);
     });
