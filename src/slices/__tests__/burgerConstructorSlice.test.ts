@@ -1,9 +1,4 @@
 import { burgerConstructorReducer as reducer } from '../burgerConstructorSlice';
-import { v4 as uuidv4 } from 'uuid';
-
-jest.mock('uuid', () => ({
-  v4: () => 'test-uuid'
-}));
 
 const mockIngredient = {
   _id: '123',
@@ -39,13 +34,21 @@ describe('burgerConstructorSlice', () => {
   });
 
   it('должен добавить начинку', () => {
+    const ingredientWithId = {
+      ...mockIngredient,
+      type: 'main',
+      id: 'test-uuid'
+    };
+
     const action = {
       type: 'burgerConstructor/addIngredient',
-      payload: { ingredient: { ...mockIngredient, type: 'main' } }
+      payload: { ingredient: ingredientWithId }
     };
+
     const state = reducer(initialState, action);
+
     expect(state.constructorItems.ingredients).toHaveLength(1);
-    expect(state.constructorItems.ingredients[0].id).toBe('test-uuid');
+    expect(state.constructorItems.ingredients[0]).toEqual(ingredientWithId);
   });
 
   it('должен удалить ингредиент', () => {
