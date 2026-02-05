@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TAddIngredient, TConstructorState, TOrder } from '@utils-types';
 import { v4 as uuidv4 } from 'uuid';
 
-const initialState: TConstructorState = {
+export const initialState: TConstructorState = {
   constructorItems: {
     bun: null,
     ingredients: []

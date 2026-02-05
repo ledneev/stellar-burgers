@@ -1,4 +1,4 @@
-import { feedReducer as reducer } from '../feedSlice';
+import { feedReducer as reducer, initialState } from '../feedSlice';
 
 const mockOrders = [
   {
@@ -12,15 +12,6 @@ const mockOrders = [
 ];
 
 describe('feedSlice', () => {
-  const initialState = {
-    orders: [],
-    total: 0,
-    totalToday: 0,
-    isLoading: false,
-    error: null,
-    loaded: false
-  };
-
   it('должен установить loading при pending', () => {
     const action = { type: 'feed/fetch/pending' };
     const state = reducer(initialState, action);

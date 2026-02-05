@@ -1,4 +1,7 @@
-import { ingredientsReducer as reducer } from '../ingredientsSlice';
+import {
+  ingredientsReducer as reducer,
+  initialState
+} from '../ingredientsSlice';
 
 const mockIngredients = [
   {
@@ -17,12 +20,6 @@ const mockIngredients = [
 ];
 
 describe('ingredientsSlice', () => {
-  const initialState = {
-    ingredients: [],
-    loading: false,
-    error: null
-  };
-
   it('должен установить loading в true при pending', () => {
     const action = { type: 'ingredients/fetchIngredients/pending' };
     const state = reducer(initialState, action);

@@ -1,4 +1,7 @@
-import { burgerConstructorReducer as reducer } from '../burgerConstructorSlice';
+import {
+  burgerConstructorReducer as reducer,
+  initialState
+} from '../burgerConstructorSlice';
 
 const mockIngredient = {
   _id: '123',
@@ -15,15 +18,6 @@ const mockIngredient = {
 };
 
 describe('burgerConstructorSlice', () => {
-  const initialState = {
-    constructorItems: {
-      bun: null,
-      ingredients: []
-    },
-    orderRequest: false,
-    orderModalData: null
-  };
-
   it('должен добавить булку', () => {
     const action = {
       type: 'burgerConstructor/addIngredient',

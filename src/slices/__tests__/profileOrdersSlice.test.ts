@@ -1,4 +1,7 @@
-import { profileOrdersReducer as reducer } from '../profileOrdersSlice';
+import {
+  profileOrdersReducer as reducer,
+  initialState
+} from '../profileOrdersSlice';
 
 const mockOrders = [
   {
@@ -12,13 +15,6 @@ const mockOrders = [
 ];
 
 describe('profileOrdersSlice', () => {
-  const initialState = {
-    orders: { orders: [], total: 0, totalToday: 0 },
-    loading: false,
-    error: null,
-    loaded: false
-  };
-
   it('должен установить loading при pending', () => {
     const action = { type: 'profileOrders/fetchUserOrders/pending' };
     const state = reducer(initialState, action);

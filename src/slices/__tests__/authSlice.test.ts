@@ -1,4 +1,4 @@
-import { authReducer as reducer } from '../authSlice';
+import { authReducer as reducer, initialState } from '../authSlice';
 
 const mockUser = {
   name: 'Иван',
@@ -6,14 +6,6 @@ const mockUser = {
 };
 
 describe('authSlice', () => {
-  const initialState = {
-    user: null,
-    isAuthenticated: false,
-    isLoading: false,
-    error: null,
-    isPasswordResetRequested: false
-  };
-
   it('должен установить loading при pending', () => {
     const action = { type: 'auth/login/pending' };
     const state = reducer(initialState, action);
