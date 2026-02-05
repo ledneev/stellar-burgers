@@ -65,6 +65,7 @@ export const BurgerConstructor: FC = () => {
       .then((response) => {
         clearTimeout(timeoutId);
         dispatch(setOrderModalData(response.order));
+        dispatch(setOrderRequest(false));
         dispatch(resetConstructor());
       })
       .catch((err) => {
@@ -80,18 +81,6 @@ export const BurgerConstructor: FC = () => {
   const closeOrderModal = useCallback(() => {
     dispatch(setOrderModalData(null));
   }, [dispatch]);
-
-  useEffect(
-    () => () => {
-      if (orderRequest) {
-        dispatch(setOrderRequest(false));
-      }
-      if (orderModalData) {
-        dispatch(setOrderModalData(null));
-      }
-    },
-    [dispatch, orderRequest, orderModalData]
-  );
 
   return (
     <BurgerConstructorUI
