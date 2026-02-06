@@ -23,7 +23,7 @@ type TProfileOrdersState = {
   loaded: boolean;
 };
 
-const initialState: TProfileOrdersState = {
+export const initialState: TProfileOrdersState = {
   orders: { orders: [], total: 0, totalToday: 0 },
   loading: false,
   error: null,
